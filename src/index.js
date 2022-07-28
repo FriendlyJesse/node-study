@@ -6,7 +6,7 @@
 
 // 路径解析
 // import './url/index.js'
-import './url/mvc.js' //mvc解析
+// import './url/mvc.js' //mvc解析+参数解析
 
 // 请求其他地址
 // import './request.js'

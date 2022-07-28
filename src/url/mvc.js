@@ -1,6 +1,7 @@
 import http from 'http'
 import url from 'url'
-import { readFile, readdir } from 'fs/promises'
+// import querystring from 'querystring'
+import { readdir } from 'fs/promises'
 
 const handles = {}
 const files = await readdir('./src/url/mvc/controllers')
@@ -18,11 +19,17 @@ console.log(handles)
 const server = http.createServer(async (req, res) => {
   res.setHeader('Content-type','text/html;charset=utf8')
 
+  // 路径处理
   const pathname = url.parse(req.url).pathname
   const paths = pathname.split('/')
   const controller = paths[1] || 'index'
   const action = paths[2] || 'index'
   const args = paths.splice(3)
+
+  // 参数处理
+  const query = url.parse(req.url, true).query
+  req.query = query
+  console.log(query)
 
   if (handles[controller] && handles[controller][action]) {
     handles[controller][action].apply(null, [req, res].concat(args))
@@ -31,14 +38,6 @@ const server = http.createServer(async (req, res) => {
     res.end('找不到响应控制器')
   }
   
-  // try {
-  //   const file = await readFile('./src/url/html/' + pathname)
-  //   res.writeHead(200)
-  //   res.end(file)
-  // } catch (err) {
-  //   res.writeHead(404)
-  //   res.end('找不到相关文件。- -')
-  // }
 })
 
 server.listen(1337, '127.0.0.1')
