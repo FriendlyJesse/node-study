@@ -1,1 +1,3 @@
-console.log(111)
+// 一个简单的服务
+import './server.js'
+
